@@ -21,7 +21,7 @@ double synlkp = 0, synlki = 0.000, synlkd = 0, synrkp = 0, synrki = 0.00, synrkd
 uint8_t synmax = 100, synmin = 0;   //Variables for min and max adjust pwm
 //global variables defined
 int pwmsl = 70;
-int endvalue=0;
+int endvalue = 0;
 float angle;
 volatile unsigned int encoderlfPos = 0;
 volatile unsigned int encoderlbPos = 0;
@@ -78,11 +78,11 @@ void doEncoderrb() {
 void drive(int st, int en)
 {
   int diff = abs(st - en);
+  int initialpos = st;
   analogWrite(lfleg1, pwmsl);
   analogWrite(lfleg2, 0);
-  while (diff >= 0)
+  while (diff > abs(initialpos - encoderlfPos))
   {
-    diff--;
     analogWrite(lbleg1, pwmsl + bklcorr);
     analogWrite(lbleg2, 0);
     syncl.run();
@@ -90,8 +90,8 @@ void drive(int st, int en)
 }
 
 void loop() {
-  endvalue=40;
-drive(encoderlfPos,encoderlfPos+endvalue)
+  endvalue = 40;
+  drive(encoderlfPos, encoderlfPos + endvalue);
 }
 
 
